@@ -14,12 +14,21 @@ def primes(n):
                     break
             if is_prime:
                 primes_list.append(i)
-    print(primes_list)
+    return primes_list
 
+def primes_eratosthenes(n):
+    primes = [True] * (n+1)
+    primes[0] = primes[1] = False
+    for i in range(2,n+1):
+        if primes[i]:
+            for j in range(i*i,n+1,i):
+                primes[j] = False
+    return [i for i, prime in enumerate(primes) if prime]
 
 def main():
-    n = 20
-    primes(n)
+    n = 200
+    print(primes(n))
+    print(primes_eratosthenes(n))
 
 if __name__ == "__main__":
     main()
