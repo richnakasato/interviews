@@ -22,7 +22,7 @@ def binary_perm_recurse(n):
 
 def binary_perm_iter(n):
     res = ['A','B']
-    n -= 1
+    n-=1
     while n:
         left = res[:]
         right = res[:]
