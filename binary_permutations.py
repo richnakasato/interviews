@@ -9,15 +9,19 @@ def helper(arr, n, curr, results):
         return
 
 
-def binary_perm_recurse(arr, n):
+def binary_permutations(arr, n):
     results = list()
     helper(arr, n, '', results)
     return results
 
 
-def binary_perm_iter(arr, n):
-    count = 2**n
-    res = arr
+def binary_perm_recurse(n):
+    arr = ['A','B']
+    return binary_permutations(arr, n)
+
+
+def binary_perm_iter(n):
+    res = ['A','B']
     n -= 1
     while n:
         left = res[:]
@@ -31,11 +35,10 @@ def binary_perm_iter(arr, n):
 
 
 def main():
-    arr = ['A','B']
     n = 15
     for i in range(1,n+1):
-        recursive = binary_perm_recurse(arr, i)
-        iterative = binary_perm_iter(arr, i)
+        recursive = binary_perm_recurse(i)
+        iterative = binary_perm_iter(i)
         assert recursive==iterative
 
 
