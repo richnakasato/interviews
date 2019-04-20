@@ -1,0 +1,28 @@
+0xF - 4 bits set
+0xE - 3 bits set (0x1110)
+0xD - 3 bits set (0x1101)
+0xC - 2 bits set (0x1100)
+0x0 - 0 bits set
+(3(f) * 4) + (4(e) * 3) + (1(d) * 3) + (1(c) * 2) = 29 bits set.
+
+Then I typed it into a calculator and counted the bits to make sure I did my math correctly.
+
+--
+
+
+I am able to recognize that "[](){}" is a lambda function in C++11.  I also recognized that a pair of parenthesis typically indicate the precending object is a function or that they are part of some expression, but I was unable to make any further connections and I had to look up what a parenthesis does after a lambda.  "[](){}()" -> lambda function with empty capture list, empty parameter list, doing nothing ("[](){}"), which is then called passing no parameters (final "()").  This makes sense since the lambda defines a function and the parenthesis calls it.  Here's the code I wrote to test how this worked:
+
+#include <cassert>
+#include <iostream>
+
+int main()
+{
+    auto x = 10;
+    auto y = [&](int z){ return z + x; }(100);
+    assert(y==100+x);
+    return 0;
+}
+
+--
+
+Had to google this one.  Looks like it's a user group permission issue
