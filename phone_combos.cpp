@@ -73,5 +73,6 @@ int main()
     assert(valid_combo("234", "ADG"));
     assert(valid_combo("1111111112", "A"));
     assert(!valid_combo("1111111112", "AA"));
+    assert(valid_combo("00000001", ""));
     return 0;
 }
