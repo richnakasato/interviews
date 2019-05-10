@@ -1,3 +1,4 @@
+#include <iostream>
 #include <limits>
 #include <numeric>
 #include <stdio.h>
@@ -30,17 +31,27 @@ void print_pres_vals(double time,
 
 void print_network_chng(double time,
                         std::string event_name) {
-    printf("%6.3f: event %s\n", time, event_name.c_str()); }
+    printf("%6.3f: event %s\n", time, event_name.c_str());
+}
+
+// shamelessly stolen from:
+// https://stackoverflow.com/questions/17333/what-is-the-most-effective-way-for-float-and-double-comparison
+bool compare_doubles(const double lhs,
+                     const double rhs,
+                     const double epsilon) {
+    double diff = lhs - rhs;
+    return (diff < epsilon) && (-diff < epsilon);
+}
 
 int main()
 {
     const int bulk_modulus = 10;
+    const double epsilon = 0.0001;
 
-    //const double delta_t = 0.001;
-    const double delta_t = 0.1;
+    const double delta_t = 0.001;
+    //const double delta_t = 0.1;
     const double start_t = 0.0;
-    //const double end_t = 10.0;
-    const double end_t = 4.0;
+    const double end_t = 10.0;
 
     const double fill_on_t = 1.0;
     const int fill_on_cond = 1;
@@ -64,20 +75,19 @@ int main()
     std::string curr_event = "";
 
     for (double t=start_t; t<=end_t; t+=delta_t) {
-        if (t == fill_on_t) {
+        if (compare_doubles(t, fill_on_t, epsilon)) {
             fill_cond = fill_on_cond;
             curr_event = fill_on_event;
         }
-        else if (t == fill_off_t) {
+        else if (compare_doubles(t, fill_off_t, epsilon)) {
             fill_cond = fill_off_cond;
             curr_event = fill_off_event;
         }
-        else if (t == drain_on_t) {
+        else if (compare_doubles(t,drain_on_t, epsilon)) {
             drain_cond = drain_on_cond;
             curr_event = drain_on_event;
         }
 
-        // TODO RVN: do all the work!
         auto fill_mfr = mass_flow_rate(fill_cond, p1, p2);
         auto drain_mfr = mass_flow_rate(drain_cond, p2, p3);
         auto accu_vol = pres_change_rate(bulk_modulus,
@@ -86,8 +96,8 @@ int main()
         auto cyln_vol = pres_change_rate(bulk_modulus,
                                          v2,
                                          fill_mfr - drain_mfr);
-        p1 = p1 + (delta_t * accu_vol);
-        p2 = p2 + (delta_t * cyln_vol);
+        p1 = vol_elmt_pres(p1, delta_t, accu_vol);
+        p2 = vol_elmt_pres(p2, delta_t, cyln_vol);
 
         print_pres_vals(t, p1, p2);
         if (curr_event.size()) {
